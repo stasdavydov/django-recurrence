@@ -125,6 +125,7 @@ div.recurrence-widget .grid {
     border: 0;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
+    width: 100%;
 }
 
 div.recurrence-widget .grid td {
@@ -190,12 +191,12 @@ div.recurrence-widget .date-selector .calendar-button {
 }
 
 table.recurrence-calendar {
-    position: absolute;
+    /*position: absolute;*/
     background-color: white;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     /*outline: 3px solid white;*/
-    margin: 0;
+    margin: 5px 0 0 0;
 }
 
 table.recurrence-calendar td {

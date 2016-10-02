@@ -367,7 +367,8 @@ recurrence.widget.DateSelector.prototype = {
                         dateselector.hide_calendar();
                     }
                 });
-            document.body.appendChild(this.calendar.elements.root);
+            this.elements.calendar_button.parentNode.parentNode.parentNode.parentNode.appendChild(this.calendar.elements.root);
+            //document.body.appendChild(this.calendar.elements.root);
 
             this.calendar.show();
             this.set_calendar_position();
