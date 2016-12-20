@@ -1568,7 +1568,6 @@ recurrence.widget.RuleHourlyForm.prototype = {
 
       var grid = new recurrence.widget.Grid(8, 3);
 
-      var work_hours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
       var number = -1;
       for (var y=0; y < 3; y++) {
           for (var x=0; x < 8; x++) {
@@ -1577,8 +1576,6 @@ recurrence.widget.RuleHourlyForm.prototype = {
 
               cell.value = number;
               cell.innerHTML = number;
-              if (work_hours.indexOf(number) !== -1)
-                  recurrence.widget.add_class(cell, 'active');
               cell.onclick = function () {
                   var hour = parseInt(this.innerHTML, 10) || null;
                   if (recurrence.widget.has_class(this, 'active'))
