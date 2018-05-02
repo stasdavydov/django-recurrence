@@ -1,6 +1,42 @@
 Changelog
 =========
 
+1.6.0 (Pending)
+---------------
+
+* Fixes for Python 3 (:issue:`105`);
+* Support for Django 2.0 (:issue:`109`, :issue:`110`);
+* Switch back a couple of instances of ``DeserializationError`` to
+  ``ValidationError`` (:issue:`111`);
+* Switch around how we set dates in the date selector widget to avoid
+  issues with short months (:issue:`113`).
+
+1.5.0
+-----
+
+* Add Slovakian translations (:issue:`98`);
+* Add support for events occurring at a fixed point before the
+  end of the month - e.g. the second last Tuesday before the end of
+  the month (:issue:`88`);
+* Add minor style changes to make django-recurrence compatible with
+  Wagtail (:issue:`100`);
+* Allow changing the behaviour of generating recurrences on
+  ``dtstart`` by default. You can opt in to this by setting
+  ``include_dtstart=False`` on your ``RecurrenceField``
+  (:issue:`93`);
+* Ensure broken values raise ``DeserializationError`` where expected
+  (:issue:`103`).
+
+1.4.1
+-----
+
+* Make PO-Revision-Date parseable by babel (:issue:`75`);
+* Update installation notes to cover Django 1.10 (:issue:`74`);
+* Add German translation (:issue:`77`);
+* Add Brazilian translation (:issue:`79`);
+* Ensure the migrations are included when installing (:issue:`78`);
+* Fix order of arguments to `to_dateutil_rruleset` (:issue:`81`).
+
 1.4.0
 -----
 

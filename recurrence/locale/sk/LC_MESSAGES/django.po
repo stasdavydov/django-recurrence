@@ -5,421 +5,399 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Django Recurrence 1.0.1\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-24 23:21+0100\n"
-"PO-Revision-Date: 2017-02-24 23:28+0100\n"
-"Last-Translator: Bart Heesink <bheesink@jouwomgeving.nl>\n"
-"Language-Team:  <bheesink@jouwomgeving.nl>\n"
-"Language: Dutch\n"
+"PO-Revision-Date: 2017-07-28 13:58+0200\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.0.1\n"
 
 #: base.py:1087
 msgid "annually"
-msgstr "jaarlijks"
+msgstr "ročne"
 
 #: base.py:1087
 msgid "monthly"
-msgstr "maandelijks"
+msgstr "mesačne"
 
 #: base.py:1087
 msgid "weekly"
-msgstr "wekelijks"
+msgstr "týždenne"
 
 #: base.py:1087
 msgid "daily"
-msgstr "dagelijks"
+msgstr "denne"
 
 #: base.py:1088
 msgid "hourly"
-msgstr "elk uur"
+msgstr "každú zvolenú hodinu"
 
 #: base.py:1088
 msgid "minutely"
-msgstr "elke minuut"
+msgstr "každú zvolenú minútu"
 
 #: base.py:1088
 msgid "secondly"
-msgstr "elke seconde"
+msgstr "každú zvolenú sekundu"
 
 #: base.py:1091
 msgid "years"
-msgstr "jaren"
+msgstr "roky"
 
 #: base.py:1091
 msgid "months"
-msgstr "maanden"
+msgstr "mesiace"
 
 #: base.py:1091
 msgid "weeks"
-msgstr "weken"
+msgstr "týždne"
 
 #: base.py:1091
 msgid "days"
-msgstr "dagen"
+msgstr "dni"
 
 #: base.py:1092
 msgid "hours"
-msgstr "uren"
+msgstr "hodiny"
 
 #: base.py:1092
 msgid "minutes"
-msgstr "minuten"
+msgstr "minúty"
 
 #: base.py:1092
 msgid "seconds"
-msgstr "seconden"
+msgstr "sekundu"
 
 #: base.py:1097
 #, python-format
 msgid "1st %(weekday)s"
-msgstr "1e %(weekday)s"
+msgstr "prvý %(weekday)s"
 
 #: base.py:1098
 #, python-format
 msgid "2nd %(weekday)s"
-msgstr "2e %(weekday)s"
+msgstr "druhý %(weekday)s"
 
 #: base.py:1099
 #, python-format
 msgid "3rd %(weekday)s"
-msgstr "3e %(weekday)s"
+msgstr "tretí %(weekday)s"
 
 #: base.py:1100 base.py:1126
 #, python-format
 msgid "last %(weekday)s"
-msgstr "laatste %(weekday)s"
+msgstr "posledný %(weekday)s"
 
 #: base.py:1101
 #, python-format
 msgid "2nd last %(weekday)s"
-msgstr "2 na laatste %(weekday)s"
+msgstr "predposledný %(weekday)s"
 
 #: base.py:1102
 #, python-format
 msgid "3rd last %(weekday)s"
-msgstr "3 na laatste %(weekday)s"
+msgstr "predpredposledný %(weekday)s"
 
 #: base.py:1105 base.py:1131
 msgid "last"
-msgstr "laatste"
+msgstr "posledný"
 
 #: base.py:1106
 msgid "2nd last"
-msgstr "2 na laatste"
+msgstr "predposledný"
 
 #: base.py:1107
 msgid "3rd last"
-msgstr "3 na laatste"
+msgstr "tretí od konca"
 
 #: base.py:1108
 msgid "4th last"
-msgstr "4 na laatste"
+msgstr "štvrý od konca"
 
 #: base.py:1111
 msgid "Mon"
-msgstr "ma"
+msgstr "Po"
 
 #: base.py:1111
 msgid "Tue"
-msgstr "di"
+msgstr "Ut"
 
 #: base.py:1111
 msgid "Wed"
-msgstr "wo"
+msgstr "St"
 
 #: base.py:1112
 msgid "Thu"
-msgstr "do"
+msgstr "Št"
 
 #: base.py:1112
 msgid "Fri"
-msgstr "vr"
+msgstr "Pi"
 
 #: base.py:1112
 msgid "Sat"
-msgstr "za"
+msgstr "So"
 
 #: base.py:1112
 msgid "Sun"
-msgstr "zo"
+msgstr "Ne"
 
 #: base.py:1115
 msgid "Jan"
-msgstr "jan"
+msgstr "Jan"
 
 #: base.py:1115
 msgid "Feb"
-msgstr "feb"
+msgstr "Feb"
 
 #: base.py:1115
 msgid "Mar"
-msgstr "mrt"
+msgstr "Mar"
 
 #: base.py:1115
 msgid "Apr"
-msgstr "apr"
+msgstr "Apr"
 
 #: base.py:1116
 msgid "Jun"
-msgstr "jun"
+msgstr "Jún"
 
 #: base.py:1116
 msgid "Jul"
-msgstr "jul"
+msgstr "Júl"
 
 #: base.py:1116
 msgid "Aug"
-msgstr "aug"
+msgstr "Aug"
 
 #: base.py:1117
 msgid "Sep"
-msgstr "sep"
+msgstr "Sep"
 
 #: base.py:1117
 msgid "Oct"
-msgstr "okt"
+msgstr "Okt"
 
 #: base.py:1117
 msgid "Nov"
-msgstr "nov"
+msgstr "Nov"
 
 #: base.py:1117
 msgid "Dec"
-msgstr "dec"
+msgstr "Dec"
 
 #: base.py:1122
 #, python-format
 msgid "first %(weekday)s"
-msgstr "eerste %(weekday)s"
+msgstr "prvý %(weekday)s"
 
 #: base.py:1123
 #, python-format
 msgid "second %(weekday)s"
-msgstr "tweede %(weekday)s"
+msgstr "druhý %(weekday)s"
 
 #: base.py:1124
 #, python-format
 msgid "third %(weekday)s"
-msgstr "derde %(weekday)s"
+msgstr "tretí %(weekday)s"
 
 #: base.py:1125
 #, python-format
 msgid "fourth %(weekday)s"
-msgstr "vierde %(weekday)s"
+msgstr "štvrtý %(weekday)s"
 
 #: base.py:1127
 #, python-format
 msgid "second last %(weekday)s"
-msgstr "twee na laatste %(weekday)s"
+msgstr "predposledný %(weekday)s"
 
 #: base.py:1128
 #, python-format
 msgid "third last %(weekday)s"
-msgstr "drie na laatste %(weekday)s"
+msgstr "tretí %(weekday)s od konca"
 
 #: base.py:1132
 msgid "second last"
-msgstr "voorlaatste"
+msgstr "predpokledný"
 
 #: base.py:1133
 msgid "third last"
-msgstr "derde laatste"
+msgstr "tretí od konca"
 
 #: base.py:1134
 msgid "fourth last"
-msgstr "vierde laatste"
+msgstr "štvrtý od konca"
 
 #: base.py:1137 choices.py:17
 msgid "Monday"
-msgstr "maandag"
+msgstr "Pondelok"
 
 #: base.py:1137 choices.py:18
 msgid "Tuesday"
-msgstr "dinsdag"
+msgstr "Utorok"
 
 #: base.py:1137 choices.py:19
 msgid "Wednesday"
-msgstr "woensdag"
+msgstr "Streda"
 
 #: base.py:1138 choices.py:20
 msgid "Thursday"
-msgstr "donderdag"
+msgstr "Štvrtok"
 
 #: base.py:1138 choices.py:21
 msgid "Friday"
-msgstr "vrijdag"
+msgstr "Piatok"
 
 #: base.py:1138 choices.py:22
 msgid "Saturday"
-msgstr "zaterdag"
+msgstr "Sobota"
 
 #: base.py:1138 choices.py:23
 msgid "Sunday"
-msgstr "zondag"
+msgstr "Nedeľa"
 
 #: base.py:1141 choices.py:27
 msgid "January"
-msgstr "januari"
+msgstr "Január"
 
 #: base.py:1141 choices.py:28
 msgid "February"
-msgstr "februari"
+msgstr "Február"
 
 #: base.py:1141 choices.py:29
 msgid "March"
-msgstr "maart"
+msgstr "Marec"
 
 #: base.py:1141 choices.py:30
 msgid "April"
-msgstr "april"
+msgstr "Apríl"
 
 #: base.py:1142 choices.py:32
 msgid "June"
-msgstr "juni"
+msgstr "Jún"
 
 #: base.py:1142 choices.py:33
 msgid "July"
-msgstr "juli"
+msgstr "Júl"
 
 #: base.py:1142 choices.py:34
 msgid "August"
-msgstr "augustus"
+msgstr "August"
 
 #: base.py:1143 choices.py:35
 msgid "September"
-msgstr "september"
+msgstr "September"
 
 #: base.py:1143 choices.py:36
 msgid "October"
-msgstr "oktober"
+msgstr "Október"
 
 #: base.py:1143 choices.py:37
 msgid "November"
-msgstr "november"
+msgstr "November"
 
 #: base.py:1143 choices.py:38
 msgid "December"
-msgstr "december"
+msgstr "December"
 
 #: base.py:1161 base.py:1178 base.py:1189 base.py:1202 base.py:1220
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: base.py:1167
 #, python-format
 msgid "every %(number)s %(freq)s"
-msgstr "elke %(number)s %(freq)s"
+msgstr "každý  %(number)s %(freq)s"
 
 #: base.py:1181 base.py:1205
 #, python-format
 msgid "each %(items)s"
-msgstr "iedere %(items)s"
+msgstr "každý %(items)s"
 
 #: base.py:1184 base.py:1193 base.py:1197
 #, python-format
 msgid "on the %(items)s"
-msgstr "op de %(items)s"
+msgstr "o %(items)s"
 
 #: base.py:1212
 msgid "occuring once"
-msgstr "éénmalig"
+msgstr "nastáva raz"
 
 #: base.py:1214
 #, python-format
 msgid "occuring %(number)s times"
-msgstr "%(number)s keer herhalen"
+msgstr "nastáva %(number)s krát"
 
 #: base.py:1217
 #, python-format
 msgid "until %(date)s"
-msgstr "tot %(date)s"
+msgstr "do %(date)s"
 
 #: choices.py:7
 msgid "Secondly"
-msgstr "Elke seconde"
+msgstr "Každú zvolenú sekundu"
 
 #: choices.py:8
 msgid "Minutely"
-msgstr "Elke minuut"
+msgstr "Každú zvolenú minútu"
 
 #: choices.py:9
 msgid "Hourly"
-msgstr "Elk uur"
+msgstr "Každú zvolenú hodinu"
 
 #: choices.py:10
 msgid "Daily"
-msgstr "Dagelijks"
+msgstr "Denne"
 
 #: choices.py:11
 msgid "Weekly"
-msgstr "Wekelijks"
+msgstr "Týždenne"
 
 #: choices.py:12
 msgid "Monthly"
-msgstr "Maandelijks"
+msgstr "Mesačne"
 
 #: choices.py:13
 msgid "Yearly"
-msgstr "Jaarlijks"
+msgstr "Ročne"
 
 #: choices.py:31
 msgid "May"
-msgstr "mei"
+msgstr "Máj"
 
 #: choices.py:44
 msgid "Inclusion"
-msgstr "Inclusief"
+msgstr "Zahrnuté"
 
 #: choices.py:45
 msgid "Exclusion"
-msgstr "Uitgezonderd"
+msgstr "Vylúčené"
 
 #: forms.py:72
 msgid "Invalid frequency."
-msgstr "Ongeldige herhaling."
+msgstr "Nesprávna frekvencia."
 
 #: forms.py:74
 #, python-format
 msgid "Max rules exceeded. The limit is %(limit)s"
-msgstr "Maximaal aantal van %(limit)s regels is overschreden."
+msgstr "Maximum pravidiel prekročených. Limit je %(limit)s"
 
 #: forms.py:76
 #, python-format
 msgid "Max exclusion rules exceeded. The limit is %(limit)s"
-msgstr "Maximaal aantal van %(limit)s uitgezonderde regels is overschreden."
+msgstr "Maximum vylučovacích pravidiel prekročených. Limit je %(limit)s"
 
 #: forms.py:78
 #, python-format
 msgid "Max dates exceeded. The limit is %(limit)s"
-msgstr "Maximaal aantal van %(limit)s data overschreden."
+msgstr "Maximum dátumov prekročené. Limit je %(limit)s"
 
 #: forms.py:80
 #, python-format
 msgid "Max exclusion dates exceeded. The limit is %(limit)s"
-msgstr "Maximaal aantal van %(limit)s uitgezonderde data is overschreden."
-
-#~ msgid "year"
-#~ msgstr "jaar"
-
-#~ msgid "month"
-#~ msgstr "maand"
-
-#~ msgid "week"
-#~ msgstr "week"
-
-#~ msgid "day"
-#~ msgstr "dag"
-
-#~ msgid "hour"
-#~ msgstr "uur"
-
-#~ msgid "minute"
-#~ msgstr "minuut"
-
-#~ msgid "second"
-#~ msgstr "seconde"
+msgstr "Maximum vylučovacích dátumov prekročené. Limit je %(limit)s"

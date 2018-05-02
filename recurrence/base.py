@@ -16,6 +16,7 @@ import calendar
 import pytz
 import dateutil.rrule
 from django.utils import dateformat, timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext as _, pgettext as _p
 from django.utils.six import string_types
 
@@ -243,13 +244,14 @@ class Rule(object):
             cache=cache, **kwargs)
 
 
+@python_2_unicode_compatible
 class Recurrence(object):
     """
     A combination of `Rule` and `datetime.datetime` instances.
 
     A `Recurrence` instance provides the combined behavior of the
     rfc2445 `DTSTART`, `DTEND`, `RRULE`, `EXRULE`, `RDATE`, and
-    `EXDATE` propeties in generating recurring date/times.
+    `EXDATE` properties in generating recurring date/times.
 
     This is a wrapper around the `dateutil.rrule.rruleset` class while
     adhering to the rfc2445 spec. Notably a `dtstart` parameter can be
@@ -286,10 +288,18 @@ class Recurrence(object):
             occurrence set generation. Dates included that way will
             not be generated, even if some inclusive `Rule` or
             `datetime.datetime` instances matches them.
+
+        `include_dtstart` : bool
+            Defines if `dtstart` is included in the recurrence set as
+            the first occurrence. With `include_dtstart == True` it is
+            both the starting point for recurrences and the first
+            recurrence in the set (according to the rfc2445 spec).
+            With `include_dtstart == False` `dtstart` is only the rule's
+            starting point like in python's `dateutil.rrule`.
     """
     def __init__(
-        self, dtstart=None, dtend=None,
-        rrules=(), exrules=(), rdates=(), exdates=()
+        self, dtstart=None, dtend=None, rrules=(), exrules=(),
+            rdates=(), exdates=(), include_dtstart=False
     ):
         """
         Create a new recurrence.
@@ -306,11 +316,12 @@ class Recurrence(object):
         self.exrules = list(exrules)
         self.rdates = list(rdates)
         self.exdates = list(exdates)
+        self.include_dtstart = include_dtstart
 
     def __iter__(self):
         return self.occurrences()
 
-    def __unicode__(self):
+    def __str__(self):
         return serialize(self)
 
     def __hash__(self):
@@ -459,7 +470,7 @@ class Recurrence(object):
         :Returns:
             A `datetime.datetime` instance.
         """
-        return self.to_dateutil_rruleset(dtstart, cache).after(dt, inc)
+        return self.to_dateutil_rruleset(dtstart, dtend, cache).after(dt, inc)
 
     def between(
         self, after, before,
@@ -535,6 +546,8 @@ class Recurrence(object):
 
         dtstart = dtstart or self.dtstart
         dtend = dtend or self.dtend
+        include_dtstart = self.include_dtstart
+
         if dtend:
             dtend = normalize_offset_awareness(dtend or self.dtend, dtstart)
 
@@ -552,7 +565,7 @@ class Recurrence(object):
         for exrule in self.exrules:
             rruleset.exrule(exrule.to_dateutil_rrule(dtstart, dtend, cache))
 
-        if dtstart is not None:
+        if include_dtstart and dtstart is not None:
             rruleset.rdate(dtstart)
         for rdate in self.rdates:
             rdate = normalize_offset_awareness(rdate, dtstart)
@@ -783,7 +796,7 @@ def validate(rule_or_recurrence):
             elif param == 'bymonth':
                 validate_iterable_ints(rule, param, 1, 12)
             elif param == 'bymonthday':
-                validate_iterable_ints(rule, param, 1, 31)
+                validate_iterable_ints(rule, param, -4, 31)
             elif param == 'byhour':
                 validate_iterable_ints(rule, param, 0, 23)
             elif param == 'byminute':
@@ -822,17 +835,10 @@ def serialize(rule_or_recurrence):
         A rfc2445 formatted unicode string.
     """
     def serialize_dt(dt):
-        if not dt.tzinfo:
-            dt = localtz().localize(dt)
-        dt = dt.astimezone(pytz.utc)
-
-        return u'%s%s%sT%s%s%sZ' % (
+        return u'%s%s%s' % (
             str(dt.year).rjust(4, '0'),
             str(dt.month).rjust(2, '0'),
-            str(dt.day).rjust(2, '0'),
-            str(dt.hour).rjust(2, '0'),
-            str(dt.minute).rjust(2, '0'),
-            str(dt.second).rjust(2, '0'),
+            str(dt.day).rjust(2, '0')
         )
 
     def serialize_rule(rule):
@@ -886,19 +892,9 @@ def serialize(rule_or_recurrence):
     items = []
 
     if obj.dtstart:
-        if obj.dtstart.tzinfo:
-            dtstart = serialize_dt(obj.dtstart.astimezone(pytz.utc))
-        else:
-            dtstart = serialize_dt(
-                localtz().localize(obj.dtstart).astimezone(pytz.utc))
-        items.append((u'DTSTART', dtstart))
+        items.append((u'DTSTART', serialize_dt(obj.dtstart)))
     if obj.dtend:
-        if obj.dtend.tzinfo:
-            dtend = serialize_dt(obj.dtend.astimezone(pytz.utc))
-        else:
-            dtend = serialize_dt(
-                localtz().localize(obj.dtend).astimezone(pytz.utc))
-        items.append((u'DTEND', dtend))
+        items.append((u'DTEND', serialize_dt(obj.dtend)))
 
     for rrule in obj.rrules:
         items.append((u'RRULE', serialize_rule(rrule)))
@@ -906,22 +902,14 @@ def serialize(rule_or_recurrence):
         items.append((u'EXRULE', serialize_rule(exrule)))
 
     for rdate in obj.rdates:
-        if rdate.tzinfo:
-            rdate = rdate.astimezone(pytz.utc)
-        else:
-            rdate = localtz().localize(rdate).astimezone(pytz.utc)
         items.append((u'RDATE', serialize_dt(rdate)))
     for exdate in obj.exdates:
-        if exdate.tzinfo:
-            exdate = exdate.astimezone(pytz.utc)
-        else:
-            exdate = localtz().localize(exdate).astimezone(pytz.utc)
         items.append((u'EXDATE', serialize_dt(exdate)))
 
     return u'\n'.join(u'%s:%s' % i for i in items)
 
 
-def deserialize(text):
+def deserialize(text, include_dtstart=False):
     """
     Deserialize a rfc2445 formatted string.
 
@@ -991,9 +979,8 @@ def deserialize(text):
     for label, param_text in tokens:
         if not param_text:
             raise exceptions.DeserializationError('empty property: %r' % label)
-        if u'=' not in param_text:
-            params = param_text
-        else:
+
+        if label in (u'RRULE', u'EXRULE'):
             params = {}
             param_tokens = filter(lambda p: p, param_text.split(u';'))
             for item in param_tokens:
@@ -1006,7 +993,6 @@ def deserialize(text):
                 params[param_name] = list(map(
                     lambda i: i.strip(), param_value.split(u',')))
 
-        if label in (u'RRULE', u'EXRULE'):
             kwargs = {}
             for key, value in params.items():
                 if key == u'FREQ':
@@ -1064,15 +1050,15 @@ def deserialize(text):
             else:
                 exrules.append(Rule(**kwargs))
         elif label == u'DTSTART':
-            dtstart = deserialize_dt(params)
+            dtstart = deserialize_dt(param_text)
         elif label == u'DTEND':
-            dtend = deserialize_dt(params)
+            dtend = deserialize_dt(param_text)
         elif label == u'RDATE':
-            rdates.append(deserialize_dt(params))
+            rdates.append(deserialize_dt(param_text))
         elif label == u'EXDATE':
-            exdates.append(deserialize_dt(params))
+            exdates.append(deserialize_dt(param_text))
 
-    return Recurrence(dtstart, dtend, rrules, exrules, rdates, exdates)
+    return Recurrence(dtstart, dtend, rrules, exrules, rdates, exdates, include_dtstart)
 
 
 def rule_to_text(rule, short=False):
@@ -1101,6 +1087,12 @@ def rule_to_text(rule, short=False):
             -2: _('2nd last %(weekday)s'),
             -3: _('3rd last %(weekday)s'),
         }
+        last_of_month_display = {
+            -1: _('last'),
+            -2: _('2nd last'),
+            -3: _('3rd last'),
+            -4: _('4th last'),
+        }
         weekdays_display = (
             _('Mon'), _('Tue'), _('Wed'),
             _('Thu'), _('Fri'), _('Sat'), _('Sun'),
@@ -1120,6 +1112,12 @@ def rule_to_text(rule, short=False):
             -1: _('last %(weekday)s'),
             -2: _('second last %(weekday)s'),
             -3: _('third last %(weekday)s'),
+        }
+        last_of_month_display = {
+            -1: _('last'),
+            -2: _('second last'),
+            -3: _('third last'),
+            -4: _('fourth last'),
         }
         weekdays_display = (
             _('Monday'), _('Tuesday'), _('Wednesday'),
@@ -1175,8 +1173,8 @@ def rule_to_text(rule, short=False):
     if rule.freq == MONTHLY:
         if rule.bymonthday:
             items = _(', ').join([
-                dateformat.format(
-                    datetime.datetime(1, 1, day), 'jS')
+                dateformat.format(datetime.datetime(1, 1, day), 'jS') if day > 0
+                else last_of_month_display.get(day, day)
                 for day in rule.bymonthday])
             parts.append(_('on the %(items)s') % {'items': items})
         elif rule.byday:

@@ -18,6 +18,10 @@ except ImportError:
 class RecurrenceField(fields.Field):
     """Field that stores a `recurrence.base.Recurrence` to the database."""
 
+    def __init__(self, include_dtstart=False, **kwargs):
+        self.include_dtstart = include_dtstart
+        super(RecurrenceField, self).__init__(**kwargs)
+
     def get_internal_type(self):
         return 'TextField'
 
@@ -25,7 +29,7 @@ class RecurrenceField(fields.Field):
         if value is None or isinstance(value, recurrence.Recurrence):
             return value
         value = super(RecurrenceField, self).to_python(value) or u''
-        return recurrence.deserialize(value)
+        return recurrence.deserialize(value, self.include_dtstart)
 
     def from_db_value(self, value, *args, **kwargs):
         return self.to_python(value)
@@ -40,7 +44,7 @@ class RecurrenceField(fields.Field):
         setattr(cls, self.name, Creator(self))
 
     def value_to_string(self, obj):
-        return self.get_prep_value(self._get_val_from_obj(obj))
+        return self.get_prep_value(self.value_from_object(obj))
 
     def formfield(self, **kwargs):
         defaults = {

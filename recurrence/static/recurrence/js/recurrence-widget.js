@@ -238,9 +238,7 @@ recurrence.widget.Calendar.prototype = {
             month != this.date.getMonth() ||
             day != this.date.getDate()) {
 
-            this.date.setFullYear(year);
-            this.date.setMonth(month);
-            this.date.setDate(day);
+            this.date.setTime(new Date(year, month, day).getTime());
 
             recurrence.array.foreach(
                 this.elements.month_grid.cells, function(cell) {
@@ -406,10 +404,8 @@ recurrence.widget.DateSelector.prototype = {
 
                 if (!this.date)
                     this.date = recurrence.widget.date_today();
-                this.date.setFullYear(year);
-                this.date.setMonth(month);
-                this.date.setDate(day);
 
+                this.date.setTime(new Date(year, month, day).getTime());
                 this.elements.date_field.value = datestring;
 
                 if (this.onchange)
@@ -1280,26 +1276,25 @@ recurrence.widget.RuleMonthlyForm.prototype = {
             for (var x=0; x < 7; x++) {
                 number += 1;
                 var cell = monthday_grid.cell(x, y);
-                if (number > 31) {
-                    recurrence.widget.add_class(cell, 'empty');
-                    continue;
-                } else {
-                    cell.innerHTML = number;
-                    if (this.rule.bymonthday.indexOf(number) > -1)
-                        recurrence.widget.add_class(cell, 'active');
-                    cell.onclick = function () {
-                        if (monthday_grid.disabled)
-                            return;
-                        var day = parseInt(this.innerHTML, 10) || null;
-                        if (day) {
-                            if (recurrence.widget.has_class(this, 'active'))
-                                recurrence.widget.remove_class(this, 'active');
-                            else
-                                recurrence.widget.add_class(this, 'active');
-                            form.set_bymonthday();
-                        }
+
+		// use the last four cells to provide negative
+		// day indexes
+                cell.innerHTML = number<=31 ? number : number-36;
+                if (this.rule.bymonthday.indexOf(number) > -1)
+                    recurrence.widget.add_class(cell, 'active');
+                cell.onclick = function () {
+                    if (monthday_grid.disabled)
+                        return;
+                    var day = parseInt(this.innerHTML, 10) || null;
+                    if (day) {
+                        if (recurrence.widget.has_class(this, 'active'))
+                            recurrence.widget.remove_class(this, 'active');
+                        else
+                            recurrence.widget.add_class(this, 'active');
+                        form.set_bymonthday();
                     }
                 }
+                // }
             }
         }
         var monthday_grid_container = recurrence.widget.e(

@@ -1,5 +1,6 @@
 if (!recurrence)
-    var recurrence = {};
+    var recurrence = { 'USE_DATE': 1,
+                       'NO_UTC': 0};
 
 
 recurrence.Rule = function(freq, options) {
@@ -145,10 +146,18 @@ recurrence.Rule.prototype = {
                 // i.e. 'on the 1st, 5th, 10th'
                 var items = recurrence.array.foreach(
                     this.bymonthday, function(day, i) {
-                        var dt = new Date();
-                        dt.setMonth(0);
-                        dt.setDate(day);
-                        return recurrence.date.format(dt, '%j%S');
+			if (day < 0) {
+			    if (short) {
+				return recurrence.display.last_of_month_short[String(day)]
+			    } else {
+				return recurrence.display.last_of_month[String(day)]
+			    }
+			} else {
+                            var dt = new Date();
+                            dt.setMonth(0);
+                            dt.setDate(day);
+                            return recurrence.date.format(dt, recurrence.display.month_day);
+			}
                 });
                 items = items.join(', ');
                 parts.push(
@@ -207,7 +216,7 @@ recurrence.Rule.prototype = {
             parts.push(
                 interpolate(
                     recurrence.display.tokens.until,
-                    {'date': recurrence.date.format(this.until, '%Y-%m-%d')}, true));
+                    {'date': recurrence.date.format(this.until, pgettext('Until date format', '%Y-%m-%d'))}, true));
         }
 
         return parts.join(', ');
@@ -438,8 +447,11 @@ recurrence.DateFormat.prototype = {
         var day = this.data.getDate();
         var ordinal_indicator = recurrence.display.ordinal_indicator;
         var language_code = recurrence.language_code;
-        if (language_code in ordinal_indicator)
+        if (language_code in ordinal_indicator) {
             return ordinal_indicator[language_code](day);
+	} else if (language_code.split('-')[0] in ordinal_indicator) {
+	    return ordinal_indicator[language_code.split('-')[0]](day)
+	}
         return '';
     },
 
@@ -560,6 +572,15 @@ recurrence.serialize = function(rule_or_recurrence) {
                 return initial;
             }
         };
+        if (recurrence.USE_DATE) {
+            return pad(dt.getFullYear(), 4) +
+                pad(dt.getMonth() + 1, 2) +
+                pad(dt.getDate(), 2);
+        } else if (recurrence.NO_UTC) {
+            return pad(dt.getFullYear(), 4) +
+                pad(dt.getMonth() + 1, 2) +
+                pad(dt.getDate(), 2) + '000000';
+        } 
         return pad(dt.getUTCFullYear(), 4) +
             pad(dt.getUTCMonth() + 1, 2) +
             pad(dt.getUTCDate(), 2) + 'T' +
@@ -655,7 +676,7 @@ recurrence.serialize = function(rule_or_recurrence) {
 recurrence.deserialize = function(text) {
     var deserialize_dt = function(text) {
         var year = parseInt(text.slice(0, 4), 10);
-        var month = parseInt(text.slice(4, 6), 10);
+        var month = parseInt(text.slice(4, 6), 10) - 1; // 0 based
         var day = parseInt(text.slice(6, 8), 10);
         if (text.indexOf('T') > 0) {
             var hour = parseInt(text.slice(9, 11), 10);
@@ -667,20 +688,14 @@ recurrence.deserialize = function(text) {
             var second = 0;
         }
         var dt = new Date();
-        if (text.indexOf('Z') > 0) {
-            dt.setUTCFullYear(year);
-            dt.setUTCMonth(month - 1);
-            dt.setUTCDate(day);
-            dt.setUTCHours(hour);
-            dt.setUTCMinutes(minute);
-            dt.setUTCSeconds(second);
+        if (recurrence.USE_DATE) {
+            return new Date(year, month, day);
+        } else if (recurrence.NO_UTC) {
+            return new Date(year, month, day, hour, minute, second);
+        } else if (text.indexOf('Z') > 0) {
+            return new Date(Date.UTC(year, month, day, hour, minute, second));
         } else {
-            dt.setFullYear(year);
-            dt.setMonth(month - 1);
-            dt.setDate(day);
-            dt.setHours(hour);
-            dt.setMinutes(minute);
-            dt.setSeconds(second);
+            return new Date(year, month, day, hour, minute, second);
         }
         return dt;
     };
@@ -1060,6 +1075,18 @@ recurrence.display.weekdays_position_short = {
     '-2': gettext('2nd last %(weekday)s'),
     '-3': gettext('3rd last %(weekday)s')
 };
+recurrence.display.last_of_month = {
+    '-1': gettext('last'),
+    '-2': gettext('second last'),
+    '-3': gettext('third last'),
+    '-4': gettext('fourth last')
+}
+recurrence.display.last_of_month_short = {
+    '-1': gettext('last'),
+    '-2': gettext('2nd last'),
+    '-3': gettext('3rd last'),
+    '-4': gettext('4th last')
+}
 recurrence.display.months = [
     gettext('January'), gettext('February'), gettext('March'),
     gettext('April'), pgettext('month name', 'May'), gettext('June'),
@@ -1082,9 +1109,10 @@ recurrence.display.ampm = {
     'am': gettext('a.m.'), 'pm': gettext('p.m.'),
     'AM': gettext('AM'), 'PM': gettext('PM')
 };
+recurrence.display.month_day = pgettext('Day of month', '%j%S');
 
 recurrence.display.ordinal_indicator = {
-    'en-us': function(day) {
+    'en': function(day) {
         if (day == 11 || day == 12 || day == 13)
             return 'th';
         var last = day % 10;
@@ -1096,7 +1124,7 @@ recurrence.display.ordinal_indicator = {
             return 'rd';
         return 'th';
     },
-    'fr-FR': function(day) {
+    'fr': function(day) {
         if (day == 1)
             return 'er';
         return '';
